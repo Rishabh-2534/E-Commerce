@@ -7,6 +7,8 @@ Product(Product_id,seller_id,category,Price,Brand,verified,Description)
 Order(Order_id,Product_id,Quantity,Price,Paid,Received)
 Cart(cart_id,User_id)
 Cart_items(cart_id,productId,Quanity);
+Address(street, city, state , country, zip code)
+Account(accNo,bankName,ifscCode,accType)
 */
 const UserSchema= {
     userId:String,
@@ -14,28 +16,24 @@ const UserSchema= {
     password:String,
     role:String,
 }
-
 const SellerSchema= {
     userId: ObjectId,
     sellerId: String,
     name:String,
     verified:Boolean,
-    addressId:String,
-    accountId:String,
+    addressId:ObjectId,
+    accountId:ObjectId,
 }
-
 const buyerSchema= {
     userId:ObjectId,
     name:String,
     contact:String,
-    addressId:String,
+    addressId:ObjectId,
 }
-
 const adminSchema= {
     userId:ObjectId,
     name:String,
 }
-
 const ProductSchema= {
     sellerId: ObjectId,
     category: String,
@@ -44,7 +42,6 @@ const ProductSchema= {
     verified:Boolean,
     description:String,
 }
-
 const OrderSchema ={
     productId:ObjectId,
     quantity:Number,
@@ -52,13 +49,24 @@ const OrderSchema ={
     paid:Boolean,
     received:Boolean,
 }
-
 const cartSchema={
     UserId:ObjectId,
 }
-
 const cartItemSchema={
     cartId:ObjectId,
     productId:ObjectId,
     quantity:Number,
 }
+const addressSchema = {   
+    street: String,
+    city: String,
+    state: String,
+    country: String,
+    zipCode: String,    
+};
+const accountSchema = {       
+    accountNumber: String,  
+    bankName: String,
+    ifscCode: String,      
+    accountType: String,
+};
