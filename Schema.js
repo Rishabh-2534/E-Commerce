@@ -2,7 +2,6 @@
 User(User_id,UserName,Password,Role)
 Seller(User_id,seller_id,Name,verified,AddressId,account_id)
 Buyer(User_id,Name,contact,AddressId)
-Admin(User_id,Name)
 Product(Product_id,seller_id,category,Price,Brand,verified,Description)
 Order(Order_id,Product_id,Quantity,Price,Paid,Received)
 Cart(cart_id,User_id)
@@ -29,10 +28,6 @@ const buyerSchema= {
     name:String,
     contact:String,
     addressId:ObjectId,
-}
-const adminSchema= {
-    userId:ObjectId,
-    name:String,
 }
 const ProductSchema= {
     sellerId: ObjectId,
