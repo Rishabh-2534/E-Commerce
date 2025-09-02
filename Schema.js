@@ -9,6 +9,15 @@ Cart_items(cart_id,productId,Quanity);
 Address(street, city, state , country, zip code)
 Account(accNo,bankName,ifscCode,accType)
 */
+const mongoose = require("mongoose");
+const userSchema= new mongoose.Schema({
+    userId:String,
+    userName:String,
+    password:String,
+    role:String,
+});
+const User =mongoose.Model("User",userSchema);
+export default User;
 const UserSchema= {
     userId:String,
     userName:String,
