@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 const buyerSchema= new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  buyerId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   name: String,
   contact: String,
   addressId: String

@@ -5,6 +5,7 @@ const productSchema= new mongoose.Schema({
     price:Number,
     brand:String,
     verified:Boolean,
-    description:String
-});
+    description:String,
+    isDeleted:{type:Boolean,default:false},
+},{timestamps:true,_id:false});
 export const Product= mongoose.model("Product",productSchema);

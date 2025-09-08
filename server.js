@@ -4,8 +4,8 @@ import User from "./models/user.js";
 import { responseHandler } from "./middleware/responseHandler.js";
 const app= express();
 dotenv.config();
-
-app.get("/",responseHandler,(req,res)=>{
+app.use(responseHandler);
+app.get("/",(req,res)=>{
     res.json({message:"hello from server"});
 })
 app.listen(process.env.PORT,()=>{
