@@ -2,9 +2,13 @@ import * as authService from "../services/auth.service.js";
 
 // Register
 export async function registerUser(req, res) {
-  const data = req.body;
-  const user = await authService.registerUser(data);
-  res.json(user);
+  try {
+    const data = req.body;
+    const user = await authService.registerUser(data);
+    res.json(user);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 }
 
 // Login
@@ -22,29 +26,47 @@ export async function loginUser(req, res) {
   }
 }
 
-
-// Request update (sends email with link)
-export async function requestUpdateDetails(req, res) {
-  const { user } = req; // from middleware
-  const data = req.body;
-
-  const result = await authService.requestUpdateDetails(user.email, data);
-  res.json({
-    message: "Verification email sent. Please check your inbox.",
-    result,
-  });
+// Update details (no confirmation, direct update)
+export async function updateUserDetails(req, res) {
+  try {
+    const { userId } = req.user; // from middleware
+    const data = req.body;
+    const result = await authService.updateUserDetails(userId, data);
+    res.json(result);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 }
 
-// Confirm update (user clicks link)
-export async function confirmUpdateDetails(req, res) {
-  const { token } = req.params;
-  const result = await authService.confirmUpdateDetails(token);
-  res.json(result);
+// Request password change (send confirmation email)
+export async function requestPasswordChange(req, res) {
+  try {
+    const { email, newPassword } = req.body;
+    const result = await authService.requestPasswordChange(email, newPassword);
+    res.json(result);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+}
+
+// Confirm password change
+export async function confirmPasswordChange(req, res) {
+  try {
+    const { token } = req.params;
+    const result = await authService.confirmPasswordChange(token);
+    res.json(result);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 }
 
 // Logout
 export async function logoutUser(req, res) {
-  const { userId } = req.user;
-  const result = await authService.logoutUser(userId);
-  res.json(result);
+  try {
+    const { userId } = req.user; // from middleware
+    const result = await authService.logoutUser(userId);
+    res.json(result);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 }

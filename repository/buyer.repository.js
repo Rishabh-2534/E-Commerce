@@ -1,37 +1,37 @@
-import { ProductModel } from "../models/product.model.js";
-import { CartModel } from "../models/cart.model.js";
-import { OrderModel } from "../models/order.model.js";
+import { Product } from "../models/product.model.js";
+import { Cart } from "../models/cart.model.js";
+import { Order } from "../models/order.model.js";
 
 
 export async function listProducts() {
-  return await ProductModel.findAll();
+  return await Product.findAll();
 }
 
 
 export async function getCart() {
-  return await CartModel.findAll();
+  return await Cart.findAll();
 }
 
 export async function addToCart(itemId) {
-  return await CartModel.create({ productId: itemId, quantity: 1 });
+  return await Cart.create({ productId: itemId, quantity: 1 });
 }
 
 export async function removeFromCart(itemId) {
-  return await CartModel.destroy({ where: { productId: itemId } });
+  return await Cart.destroy({ where: { productId: itemId } });
 }
 
 export async function emptyCart() {
-  return await CartModel.destroy({ where: {} });
+  return await Cart.destroy({ where: {} });
 }
 
 
 export async function getOrders() {
-  return await OrderModel.findAll();
+  return await Order.findAll();
 }
 
 export async function placeOrder(itemId) {
   
-  const order = await OrderModel.create({ productId: itemId, status: "PLACED" });
-  await CartModel.destroy({ where: { productId: itemId } });
+  const order = await Order.create({ productId: itemId, status: "PLACED" });
+  await Cart.destroy({ where: { productId: itemId } });
   return order;
 }

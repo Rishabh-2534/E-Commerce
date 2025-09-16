@@ -1,38 +1,91 @@
-import * as authRepository from "../repository/auth.repository.js";
-
+import * as authRepository from "../repositories/auth.repository.js";
+import nodemailer from "nodemailer";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+// SMTP transport (example: Gmail)
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+});
+
+
 // Register
+
 export async function registerUser(data) {
-  return await authRepository.registerUser(data);
+  const saltRounds = 10;
+  const hashedPassword = await bcrypt.hash(data.password, saltRounds);
+
+  return await authRepository.registerUser({
+    ...data,
+    password: hashedPassword,
+  });
 }
 
-// Login
-export async function loginUser({ email, password }) {
-  const user = await authRepository.loginUser({ email, password });
-  if (!user) {
-    throw new Error("Invalid email or password");
-  }
 
-  // Generate JWT
+// Login 
+export async function loginUser(credentials) {
+  const user = await authRepository.findUserByEmail(credentials.email);
+  if (!user) throw new Error("User not found");
+
+  const isMatch = await bcrypt.compare(credentials.password, user.password);
+  if (!isMatch) throw new Error("Invalid credentials");
+
+  // Generate JWT token
   const token = jwt.sign(
     { userId: user.id, email: user.email, role: user.role },
     process.env.JWT_SECRET,
-    { expiresIn: "1h" } // token expiry 1 hour
+    { expiresIn: "1h" }
   );
 
-  return { token, user };
+  return { token, user: { id: user.id, email: user.email, role: user.role } };
 }
 
-export async function requestUpdateDetails(email, data) {
 
- 
-
-
+export async function updateUserDetails(userId, data) {
+  await authRepository.updateUserById(userId, data);
+  return { message: "User details updated successfully" };
 }
 
-export async function confirmUpdateDetails(token) {
-  
+// Change password (with SMTP verification)
+
+// auth.service.js
+export async function requestPasswordChange(email, newPassword) {
+  const user = await authRepository.findUserByEmail(email);
+  if (!user) throw new Error("User not found");
+
+  const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+  // Generate a JWT reset token containing email + hashed password
+  const token = jwt.sign(
+    { email, hashedNewPassword },
+    process.env.JWT_SECRET,
+    { expiresIn: "15m" } 
+  );
+
+  const confirmUrl = `${process.env.APP_URL}/auth/change-password/confirm/${token}`;
+  await transporter.sendMail({
+    from: process.env.SMTP_USER,
+    to: email,
+    subject: "Confirm Password Change",
+    html: `<p>Click to confirm password change:</p><a href="${confirmUrl}">${confirmUrl}</a>`,
+  });
+
+  return { message: "Confirmation email sent" };
+}
+
+export async function confirmPasswordChange(token) {
+  try {
+    const { email, hashedNewPassword } = jwt.verify(token, process.env.JWT_SECRET);
+
+    await authRepository.updatePasswordByEmail(email, hashedNewPassword);
+    return { message: "Password updated successfully" };
+  } catch (err) {
+    throw new Error("Invalid or expired token");
+  }
 }
 
 // Logout

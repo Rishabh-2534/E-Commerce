@@ -1,8 +1,8 @@
 import express from "express";
-import {isAdminMiddleware} from "../middleware/isAdminMiddleware.js";
+import {roleCheckMiddleware} from "../middleware/verifyUser.middleware.js";
 
 const router= express.Router();
-router.use(isAdminMiddleware);
+router.use(roleCheckMiddleware(["admin"]));
 
 router.get("users",listUsers);
 router.delete("/users/:userId",deleteUser);
