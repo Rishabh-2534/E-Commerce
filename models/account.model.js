@@ -5,4 +5,5 @@ const accountSchema= new mongoose.Schema({
     ifscCode:String,
     accountType:String
 });
-export const Account = mongoose.model("Account",accountSchema);
+const Account= mongoose.model("Account",accountSchema);
+export default Account ;

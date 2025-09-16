@@ -4,4 +4,5 @@ const categorySchema = new mongoose.Schema({
     isDeleted:{type:Boolean,default:false},
 },{timestamps:true});
 
-export const Category = mongoose.model("Category",categorySchema);
+const Category = mongoose.model("Category",categorySchema);
+export default Category;

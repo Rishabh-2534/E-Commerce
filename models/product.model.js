@@ -8,4 +8,5 @@ const productSchema= new mongoose.Schema({
     description:String,
     isDeleted:{type:Boolean,default:false},
 },{timestamps:true,_id:false});
-export const Product= mongoose.model("Product",productSchema);
+const Product= mongoose.model("Product",productSchema);
+export default Product;

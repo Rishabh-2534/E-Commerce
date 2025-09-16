@@ -1,4 +1,4 @@
-import * as adminRepository from "../repositories/admin.repository.js";
+import * as adminRepository from "../repository/admin.repository.js";
 
 
 export async function listUsers() {

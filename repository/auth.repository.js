@@ -1,37 +1,38 @@
-import { UserModel } from "../models/user.model.js";
-import { PendingUpdateModel } from "../models/pendingUpdate.model.js";
+import User  from "../models/user.model.js";
 
-// Register
 export async function registerUser(data) {
-  return await UserModel.create(data);
+  return await User.create(data);
 }
 
-// Login
-export async function loginUser({ email, password }) {
-  return await UserModel.findOne({ where: { email, password } });
+export async function findUserByEmail(email) {
+  return await User.findOne({ where: { email } });
 }
 
-// Save pending update
-export async function savePendingUpdate(email, data, token) {
-  return await PendingUpdateModel.create({ email, data: JSON.stringify(data), token });
+export async function findUserById(userId) {
+  return await User.findOne({ where: { id: userId } });
 }
 
-// Find pending update
-export async function findPendingUpdate(token) {
-  return await PendingUpdateModel.findOne({ where: { token } });
-}
-
-// Delete pending update
-export async function deletePendingUpdate(token) {
-  return await PendingUpdateModel.destroy({ where: { token } });
-}
-
-// Update user
 export async function updateUserByEmail(email, data) {
-  return await UserModel.update(data, { where: { email } });
+  return await User.update(data, { where: { email } });
 }
 
+export async function updatePasswordByEmail(email, hashedPassword) {
+  return await User.update(
+    { password: hashedPassword },
+    { where: { email } }
+  );
+}
+
+export async function updatePassword(userId, hashedPassword) {
+  return await User.update(
+    { password: hashedPassword },
+    { where: { id: userId } }
+  );
+}
 
 export async function logoutUser(userId) {
-  return await UserModel.update({ sessionActive: false }, { where: { id: userId } });
+  return await User.update(
+    { sessionActive: false },
+    { where: { id: userId } }
+  );
 }

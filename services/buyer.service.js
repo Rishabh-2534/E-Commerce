@@ -1,4 +1,4 @@
-import * as buyerRepository from "../repositories/buyer.repository.js";
+import * as buyerRepository from "../repository/buyer.repository.js";
 
 // Products
 export async function listProducts() {

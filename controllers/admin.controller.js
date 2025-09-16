@@ -1,49 +1,79 @@
 import * as adminService from "../services/admin.service.js";
 
 export async function listUsers(req, res) {
-  const users = await adminService.listUsers();
-  res.json(users);
+  try {
+    const users = await adminService.listUsers();
+    res.success(users, "Users fetched successfully");
+  } catch (err) {
+    res.error(err);
+  }
 }
 
 export async function deleteUser(req, res) {
-  const { userId } = req.params;
-  const result = await adminService.deleteUser(userId);
-  res.json(result);
+  try {
+    const { userId } = req.params;
+    const result = await adminService.deleteUser(userId);
+    res.success(result, "User deleted successfully");
+  } catch (err) {
+    res.error(err);
+  }
 }
 
 export async function verifyUser(req, res) {
-  const { userId } = req.params;
-  const result = await adminService.verifyUser(userId);
-  res.json(result);
+  try {
+    const { userId } = req.params;
+    const result = await adminService.verifyUser(userId);
+    res.success(result, "User verified successfully");
+  } catch (err) {
+    res.error(err);
+  }
 }
 
 export async function deactivateUser(req, res) {
-  const { userId } = req.params;
-  const result = await adminService.deactivateUser(userId);
-  res.json(result);
+  try {
+    const { userId } = req.params;
+    const result = await adminService.deactivateUser(userId);
+    res.success(result, "User deactivated successfully");
+  } catch (err) {
+    res.error(err);
+  }
 }
 
-
 export async function listProducts(req, res) {
-  const products = await adminService.listProducts();
-  res.json(products);
+  try {
+    const products = await adminService.listProducts();
+    res.success(products, "Products fetched successfully");
+  } catch (err) {
+    res.error(err);
+  }
 }
 
 export async function verifyProduct(req, res) {
-  const { itemId } = req.params;
-  const result = await adminService.verifyProduct(itemId);
-  res.json(result);
+  try {
+    const { itemId } = req.params;
+    const result = await adminService.verifyProduct(itemId);
+    res.success(result, "Product verified successfully");
+  } catch (err) {
+    res.error(err);
+  }
 }
 
-
 export async function createCategory(req, res) {
-  const data = req.body;
-  const result = await adminService.createCategory(data);
-  res.json(result);
+  try {
+    const data = req.body;
+    const result = await adminService.createCategory(data);
+    res.success(result, "Category created successfully");
+  } catch (err) {
+    res.error(err);
+  }
 }
 
 export async function deleteCategory(req, res) {
-  const { categoryId } = req.params;
-  const result = await adminService.deleteCategory(categoryId);
-  res.json(result);
+  try {
+    const { categoryId } = req.params;
+    const result = await adminService.deleteCategory(categoryId);
+    res.success(result, "Category deleted successfully");
+  } catch (err) {
+    res.error(err);
+  }
 }

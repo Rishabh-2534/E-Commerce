@@ -1,4 +1,4 @@
-import * as sellerRepository from "../repositories/seller.repository.js";
+import * as sellerRepository from "../repository/seller.repository.js";
 
 export async function requestAddCategory(data) {
   return await sellerRepository.requestAddCategory(data);

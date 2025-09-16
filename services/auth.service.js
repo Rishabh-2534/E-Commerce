@@ -1,4 +1,4 @@
-import * as authRepository from "../repositories/auth.repository.js";
+import * as authRepository from "../repository/auth.repository.js";
 import nodemailer from "nodemailer";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
