@@ -3,7 +3,7 @@ const buyerSchema= new mongoose.Schema({
   buyerId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   name: String,
   contact: String,
-  addressId: String
+  address: String
 });
 const Buyer= mongoose.model("Buyer",buyerSchema);
 export default Buyer;

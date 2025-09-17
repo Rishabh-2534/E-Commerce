@@ -13,7 +13,8 @@ export async function requestAddCategory(req, res) {
 export async function addProduct(req, res) {
   try {
     const data = req.body;
-    const result = await sellerService.addProduct(data);
+    console.log(req.user._id);
+    const result = await sellerService.addProduct({...data,userId:req.user._id});
     res.success(result, "Product added successfully");
   } catch (err) {
     res.error(err);

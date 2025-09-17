@@ -1,6 +1,14 @@
 import  Category  from "../models/category.model.js";
 import  Product  from "../models/product.model.js";
-
+import Seller from "../models/seller.model.js";
+export async function setupSeller(userId,data){
+  return await Seller.create({
+    sellerId:userId,
+    name:data.name,
+    address:data.address,
+    accountId:data.accountId,
+  });
+}
 export async function createCategory(data) {
   return await Category.create(data);
 } 

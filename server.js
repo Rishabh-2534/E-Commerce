@@ -1,5 +1,5 @@
 import express from "express";
-import dotenv from "dotenv";
+import "dotenv/config";
 import connectDB from "./cofiguration/dbconfig.js";
 import { responseHandler } from "./middleware/resHandlr.middleware.js";
 
@@ -9,7 +9,6 @@ import buyerRoutes from "./routes/buyer.routes.js";
 import sellerRoutes from "./routes/seller.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 
-dotenv.config();
 connectDB();
 
 const app = express();

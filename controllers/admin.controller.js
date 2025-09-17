@@ -20,9 +20,13 @@ export async function deleteUser(req, res) {
 }
 
 export async function verifyUser(req, res) {
+  res.success("good");
   try {
     const { userId } = req.params;
     const result = await adminService.verifyUser(userId);
+    if(!result){
+      res.error({message:"no such seller exist"});
+    }
     res.success(result, "User verified successfully");
   } catch (err) {
     res.error(err);

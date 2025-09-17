@@ -1,5 +1,9 @@
 import * as sellerRepository from "../repository/seller.repository.js";
 
+export async function setupSeller(userId,data){
+  return await sellerRepository.setupSeller(userId,data);
+}
+
 export async function requestAddCategory(data) {
   return await sellerRepository.requestAddCategory(data);
 }

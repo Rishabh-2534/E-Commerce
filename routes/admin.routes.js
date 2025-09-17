@@ -24,7 +24,7 @@ router.post("/users/deactivate/:userId", deactivateUser);
 
 // Product management routes
 router.get("/product", listProducts);
-router.post("/product/:itemId/verify", verifyProduct);
+router.post("/product/verify/:productId", verifyProduct);
 
 // Category management routes
 router.post("/category", createCategory);

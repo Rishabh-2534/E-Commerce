@@ -14,6 +14,7 @@ export const responseHandler = (req, res, next) => {
     res.status(status).json({
       success: false,
       message: err.message ,
+      error:err
     });
   };
 

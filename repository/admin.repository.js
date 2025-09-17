@@ -1,38 +1,58 @@
-import  User from "../models/user.model.js";
-import  Product  from "../models/product.model.js";
-import Category  from "../models/category.model.js";
-
-
-export async function listUsers() {
-  return await User.findAll();
-}
+// admin.repository.js
+import User from "../models/user.model.js";
+import Product from "../models/product.model.js";
+import Category from "../models/category.model.js";
+import Seller from "../models/seller.model.js";
+import Buyer from "../models/buyer.model.js";
 
 export async function deleteUser(userId) {
-  return await User.destroy({ where: { id: userId } });
+  
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  // Delete related docs based on role
+  if (user.role === "seller") {
+    await Seller.findOneAndDelete({ sellerId: userId });
+  } else if (user.role === "buyer") {
+    await Buyer.findOneAndDelete({ buyerId: userId });
+  }
+
+  // Finally delete the user
+  return await User.findByIdAndDelete(userId);
+}
+
+export async function listUsers() {
+  return await User.find();
 }
 
 export async function verifyUser(userId) {
-  return await User.update({ verified: true }, { where: { id: userId } });
+   return await Seller.findOneAndUpdate(
+    { sellerId: userId },
+    { verified: true },        
+    { new: true }
+   );
 }
 
 export async function deactivateUser(userId) {
-  return await User.update({ active: false }, { where: { id: userId } });
+  return await User.findByIdAndUpdate(userId, { active: false }, { new: true }); 
 }
 
-
+// Products
 export async function listProducts() {
-  return await Product.findAll();
+  return await Product.find(); 
 }
 
-export async function verifyProduct(itemId) {
-  return await Product.update({ verified: true }, { where: { id: itemId } });
+export async function verifyProduct(productId) {
+  return await Product.findByIdAndUpdate(productId, { verified: true }, { new: true }); 
 }
 
-
+// Categories
 export async function createCategory(data) {
-  return await Category.create(data);
+  return await Category.create(data); 
 }
 
 export async function deleteCategory(categoryId) {
-  return await Category.destroy({ where: { id: categoryId } });
+  return await Category.findByIdAndDelete(categoryId); 
 }

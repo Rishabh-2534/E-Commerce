@@ -1,5 +1,8 @@
 import * as buyerRepository from "../repository/buyer.repository.js";
 
+export async function setupBuyer(userId,data){
+  return await buyerRepository.setupBuyer(userId,data);
+}
 // Products
 export async function listProducts() {
   return await buyerRepository.listProducts();

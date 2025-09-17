@@ -11,16 +11,15 @@ import {
   logoutUser
 } from "../controllers/auth.controller.js";
 
-router.use(roleCheckMiddleware(["seller", "buyer", "admin"]));
 
 // Auth/User routes
-router.post("/users", registerUser);
+router.post("/signup", registerUser);
 router.post("/login", loginUser);
-router.patch("/users/update", updateUserDetails); 
-router.post("/logout", logoutUser);
+router.patch("/users/update",roleCheckMiddleware(["seller", "buyer", "admin"]), updateUserDetails); 
+router.post("/logout",roleCheckMiddleware(["seller", "buyer", "admin"]), logoutUser);
 
 // Password change routes
-router.post("/users/change-password", requestPasswordChange); 
-router.get("/users/change-password/confirm/:token", confirmPasswordChange);
+router.post("/users/change-password",roleCheckMiddleware(["seller", "buyer", "admin"]), requestPasswordChange); 
+router.get("/users/change-password/confirm/:token",/*roleCheckMiddleware(["seller", "buyer", "admin"]),*/ confirmPasswordChange);
 
 export default router;

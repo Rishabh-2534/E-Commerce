@@ -4,9 +4,9 @@ const productSchema= new mongoose.Schema({
     categoryId:{type:mongoose.Schema.Types.ObjectId,ref:"Category",required:true},
     price:Number,
     brand:String,
-    verified:Boolean,
+    verified:{type:Boolean,default:false},
     description:String,
     isDeleted:{type:Boolean,default:false},
-},{timestamps:true,_id:false});
+},{timestamps:true});
 const Product= mongoose.model("Product",productSchema);
 export default Product;

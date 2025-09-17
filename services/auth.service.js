@@ -2,27 +2,55 @@ import * as authRepository from "../repository/auth.repository.js";
 import nodemailer from "nodemailer";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
+import * as sellerService from "./seller.service.js";
+import * as buyerService from "./buyer.service.js";
+import * as adminService from "./admin.service.js";
 // SMTP transport (example: Gmail)
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
+    user: process.env.SMTP_USER.trim(),
+    pass: process.env.SMTP_PASS.trim(),
   },
 });
 
 
 // Register
-
 export async function registerUser(data) {
   const saltRounds = 10;
   const hashedPassword = await bcrypt.hash(data.password, saltRounds);
-
-  return await authRepository.registerUser({
+  let user=null;
+  let account= null;
+  // create common user in DB
+try{
+   user = await authRepository.registerUser({
     ...data,
     password: hashedPassword,
   });
+  
+  if (data.role === "seller") {
+     account = await authRepository.createAccount({
+      accountNumber: data.accountNumber || `ACCT-${Date.now()}`,
+      bankName: data.bankName,
+      ifscCode: data.ifscCode,
+      accountType: data.accountType,
+    });
+    await sellerService.setupSeller(user._id, {...data,accountId:account._id});
+
+  } else if (data.role === "buyer") {
+    await buyerService.setupBuyer(user._id, data);
+  } 
+
+  return user;
+}catch(error){
+      if (user) {
+      await authRepository.deleteUserById(user._id);
+    }
+    if (account) {
+      await authRepository.deleteAccountById(account._id);
+    }
+    throw error; 
+}
 }
 
 
@@ -36,12 +64,12 @@ export async function loginUser(credentials) {
 
   // Generate JWT token
   const token = jwt.sign(
-    { userId: user.id, email: user.email, role: user.role },
+    { _id: user._id.toString(), email: user.email, role: user.role },
     process.env.JWT_SECRET,
     { expiresIn: "1h" }
   );
 
-  return { token, user: { id: user.id, email: user.email, role: user.role } };
+  return { token, user: { _id: user._id, email: user.email, role: user.role } };
 }
 
 
@@ -56,17 +84,17 @@ export async function updateUserDetails(userId, data) {
 export async function requestPasswordChange(email, newPassword) {
   const user = await authRepository.findUserByEmail(email);
   if (!user) throw new Error("User not found");
-
+  
   const hashedNewPassword = await bcrypt.hash(newPassword, 10);
-
+  
   // Generate a JWT reset token containing email + hashed password
   const token = jwt.sign(
     { email, hashedNewPassword },
     process.env.JWT_SECRET,
     { expiresIn: "15m" } 
   );
-
-  const confirmUrl = `${process.env.APP_URL}/auth/change-password/confirm/${token}`;
+  console.log("created new pass");
+  const confirmUrl = `${process.env.APP_URL}/auth/users/change-password/confirm/${token}`;
   await transporter.sendMail({
     from: process.env.SMTP_USER,
     to: email,

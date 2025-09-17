@@ -4,6 +4,10 @@ import * as authService from "../services/auth.service.js";
 export async function registerUser(req, res) {
   try {
     const data = req.body;
+    /*if (data.role === "admin" && req.user?.role !== "admin") {
+      return res.error(err,401);
+    }*/
+
     const user = await authService.registerUser(data);
     res.success(user, "User registered successfully");
   } catch (err) {
@@ -28,9 +32,9 @@ export async function loginUser(req, res) {
 // Update details (direct update, no confirmation)
 export async function updateUserDetails(req, res) {
   try {
-    const { userId } = req.user; // from middleware
+    const { _id } = req.user; // from middleware
     const data = req.body;
-    const result = await authService.updateUserDetails(userId, data);
+    const result = await authService.updateUserDetails(_id, data);
     res.success(result, "User details updated successfully");
   } catch (err) {
     res.error(err, 400);
