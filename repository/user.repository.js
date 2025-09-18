@@ -1,7 +1,5 @@
 // admin.repository.js
 import User from "../models/user.model.js";
-import Product from "../models/product.model.js";
-import Category from "../models/category.model.js";
 import Seller from "../models/seller.model.js";
 import Buyer from "../models/buyer.model.js";
 
@@ -37,22 +35,4 @@ export async function verifyUser(userId) {
 
 export async function deactivateUser(userId) {
   return await User.findByIdAndUpdate(userId, { active: false }, { new: true }); 
-}
-
-// Products
-export async function listProducts() {
-  return await Product.find(); 
-}
-
-export async function verifyProduct(productId) {
-  return await Product.findByIdAndUpdate(productId, { verified: true }, { new: true }); 
-}
-
-// Categories
-export async function createCategory(data) {
-  return await Category.create(data); 
-}
-
-export async function deleteCategory(categoryId) {
-  return await Category.findByIdAndDelete(categoryId); 
 }
