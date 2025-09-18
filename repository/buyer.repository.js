@@ -20,7 +20,7 @@ export async function listProducts() {
 
 // CART
 export async function getCart(userId) {
-  return await Cart.find({ buyerId: userId }).populate("productId");
+  return await Cart.find({ buyerId: userId });
 }
 
 export async function addToCart(userId, itemId) {
@@ -52,7 +52,7 @@ export async function emptyCart(userId) {
 
 // ORDERS
 export async function getOrders(userId) {
-  return await Order.find({ buyerId: userId }).populate("productId");
+  return await Order.find({ buyerId: userId });
 }
 
 

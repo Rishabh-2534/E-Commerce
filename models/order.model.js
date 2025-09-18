@@ -8,7 +8,7 @@ const orderSchema= new mongoose.Schema({
     }],
     paid:{type:Boolean,default:false},
     delivered:{type:Boolean ,default:false},
-    totalPrice:{type:Boolean,default:0},
+    totalPrice:{type:Number,default:0},
 },{timestamps:true});
 const Order= mongoose.model("Order",orderSchema);
 export default  Order;

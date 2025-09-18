@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import * as sellerService from "./seller.service.js";
 import * as buyerService from "./buyer.service.js";
-import * as adminService from "./admin.service.js";
+
 // SMTP transport (example: Gmail)
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -66,7 +66,7 @@ export async function loginUser(credentials) {
   const token = jwt.sign(
     { _id: user._id.toString(), email: user.email, role: user.role },
     process.env.JWT_SECRET,
-    { expiresIn: "1h" }
+    { expiresIn: "1d" }
   );
 
   return { token, user: { _id: user._id, email: user.email, role: user.role } };
