@@ -3,12 +3,6 @@ import * as buyerRepository from "../repository/buyer.repository.js";
 export async function setupBuyer(userId,data){
   return await buyerRepository.setupBuyer(userId,data);
 }
-// Products
-export async function listProducts() {
-  return await buyerRepository.listProducts();
-}
-
-// Cart
 export async function getCart(userId) {
   return await buyerRepository.getCart(userId);
 }
@@ -25,7 +19,6 @@ export async function emptyCart(userId) {
   return await buyerRepository.emptyCart(userId);
 }
 
-// Orders
 export async function getOrders(userId) {
   return await buyerRepository.getOrders(userId);
 }

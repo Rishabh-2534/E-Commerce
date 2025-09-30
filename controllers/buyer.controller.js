@@ -1,6 +1,6 @@
 import * as buyerService from "../services/buyer.service.js";
 
-export async function listProducts(req, res) {
+export async function listVerifiedProducts(req, res) {
   try {
     const products = await buyerService.listProducts();
     res.success(products, "Products fetched successfully");

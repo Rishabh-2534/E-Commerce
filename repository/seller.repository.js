@@ -9,6 +9,13 @@ export async function setupSeller(userId,data){
     accountId:data.accountId,
   });
 }
+export async function updateSeller(userId,data){
+  return  await Seller.findOneAndUpdate(
+      {sellerId:userId},
+      data,
+      {new:true},
+    );
+}
 export async function createCategory(data) {
   return await Category.create(data);
 } 
@@ -23,6 +30,10 @@ export async function deleteCategory(categoryId) {
 
 export async function addProduct(data) {
   return await Product.create(data);
+}
+
+export async function findSeller(userId){
+  return await Seller.findById({sellerId:userId});
 }
 
 export async function removeProduct(itemId) {

@@ -12,7 +12,13 @@ export async function setupBuyer(userId, data) {
     address: data.address,
   });
 }
-
+export async function updateBuyer(userId,data){
+  await Buyer.findOneAndUpdate(
+      {buyerId:userId},
+      data,
+      {new:true}
+    );
+}
 // PRODUCTS
 export async function listProducts() {
   return await Product.find({verified:true});

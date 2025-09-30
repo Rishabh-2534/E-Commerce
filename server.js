@@ -2,29 +2,17 @@ import express from "express";
 import "dotenv/config";
 import connectDB from "./cofiguration/dbconfig.js";
 import { responseHandler } from "./middleware/resHandlr.middleware.js";
-
+import loadRoutes from "./routes/index.js";
 // Routes
-import adminRoutes from "./routes/admin.routes.js";
-import buyerRoutes from "./routes/buyer.routes.js";
-import sellerRoutes from "./routes/seller.routes.js";
-import authRoutes from "./routes/auth.routes.js";
+
 
 connectDB();
 
 const app = express();
 
-// Middleware
-app.use(express.json());
-app.use(responseHandler);
-
-
-// API Routes
-app.use("/admin", adminRoutes);
-app.use("/buyer", buyerRoutes);
-app.use("/seller", sellerRoutes);
-app.use("/auth", authRoutes);
-
-
+app.use(express.json());//par
+app.use(responseHandler);// Middleware
+loadRoutes(app);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

@@ -24,7 +24,9 @@ export async function deleteUser(userId) {
 export async function listUsers() {
   return await User.find();
 }
-
+export async function findUser(userId){
+  return await User.findById(userId);
+}
 export async function verifyUser(userId) {
    return await Seller.findOneAndUpdate(
     { sellerId: userId },
