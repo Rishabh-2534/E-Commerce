@@ -4,10 +4,6 @@ import * as authService from "../services/auth.service.js";
 export async function registerUser(req, res) {
   try {
     const data = req.body;
-    /*if (data.role === "admin" && req.user?.role !== "admin") {
-      return res.error(err,401);
-    }*/
-
     const user = await authService.registerUser(data);
     res.success(user, "User registered successfully");
   } catch (err) {

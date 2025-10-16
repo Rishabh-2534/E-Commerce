@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import * as utils from "../utils.js";
 import { findUser } from "../repository/user.repository.js";
-import {findSeller} from "../repository/seller.repository.js"
+import {findSeller} from "../repository/seller_category.repository.js"
 //change name
 export function roleCheckMiddleware(allowedRoles = []) {
   return async (req, res, next) => {
@@ -42,10 +42,13 @@ export function authMiddleware(req,res,next){
     const decoded = utils.verifyJwtToken(token, process.env.JWT_SECRET);
 
     const currentUser=findUser(decoded._id);
+    
     if (!currentUser) {
       return res.error({ message: "User not found" }, 404);
     }
-
+    if(!currentUser.isLoggedIn){
+      return res.error({message: "Session Expired for user"});
+    }
     // Attach decoded token + user to request
     req.user = currentUser;
     req.tokenData = decoded;

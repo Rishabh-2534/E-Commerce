@@ -1,4 +1,3 @@
-import Product from "../models/product.model.js";
 import Cart from "../models/cart.model.js";
 import Order from "../models/order.model.js";
 import Buyer from "../models/buyer.model.js";
@@ -19,12 +18,11 @@ export async function updateBuyer(userId,data){
       {new:true}
     );
 }
-// PRODUCTS
-export async function listProducts() {
-  return await Product.find({verified:true});
+export async function deleteBuyer(userId){
+  return await Buyer.findOneAndDelete({buyerId:userId});
 }
 
-// CART
+
 export async function getCart(userId) {
   return await Cart.find({ buyerId: userId });
 }
@@ -56,7 +54,6 @@ export async function emptyCart(userId) {
   );
 }
 
-// ORDERS
 export async function getOrders(userId) {
   return await Order.find({ buyerId: userId });
 }

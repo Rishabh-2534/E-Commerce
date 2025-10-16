@@ -1,6 +1,4 @@
 import Account from "../models/account.model.js";
-import Buyer from "../models/buyer.model.js";
-import Seller from "../models/seller.model.js";
 import User from "../models/user.model.js";
 
 // Create a user
@@ -36,20 +34,6 @@ export async function updateUserById(userId, data) {
     data,
     { new: true }
   );
-  if(updatedUser.role==="seller"){
-    await Seller.findOneAndUpdate(
-      {sellerId:userId},
-      data,
-      {new:true},
-    );
-  }
-  if(updatedUser?.role==="buyer"){
-    await Buyer.findOneAndUpdate(
-      {buyerId:userId},
-      data,
-      {new:true}
-    );
-  }
 }
 
 // Update user by email
@@ -75,11 +59,8 @@ export async function updatePassword(userId, hashedPassword) {
   );
 }
 
-// Logout user (mark session inactive)
-export async function logoutUser(userId) {
-  return await User.findByIdAndUpdate(
-    userId,
-    { sessionActive: false },
-    { new: true }
-  );
+
+export async function setIsLoggedIn(userId,val) {
+  
+  return await User.findOneAndUpdate(userId,{isLoggedIn:val},{new:true});
 }

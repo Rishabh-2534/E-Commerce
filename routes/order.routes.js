@@ -4,7 +4,7 @@ const router= express.Router();
 import {
   getOrders,
   placeOrder
-} from "../controllers/buyer.controller.js";
+} from "../controllers/cart.controller.js";
 
 router.get("/",authMiddleware,roleCheckMiddleware(["buyer"]),getOrders);
 router.post("/",authMiddleware,roleCheckMiddleware(["buyer"]),placeOrder);

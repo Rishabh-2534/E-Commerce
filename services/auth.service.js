@@ -1,8 +1,8 @@
 import * as authRepository from "../repository/auth.repository.js";
 import * as utils from "../utils.js";
 import * as sellerService from "./seller.service.js";
-import * as buyerService from "./buyer.service.js";
-
+import * as buyerService from "./buyers.service.js";
+import * as sellerRepository from "../repository/seller_category.repository.js";
 
 
 
@@ -57,13 +57,16 @@ export async function loginUser(credentials) {
     { _id: user._id.toString(), email: user.email, role: user.role },
     process.env.LOGIN_TOKEN_EXPIRES_IN
   );
-
+  await authRepository.setIsLoggedIn(user._id,true);
   return { token, user: { _id: user._id, email: user.email, role: user.role } };
 }
 
 
 export async function updateUserDetails(userId, data) {
+  const user= authRepository.findUserById(userId);
   await authRepository.updateUserById(userId, data);
+  if(user.role=="seller") await sellerRepository.updateSeller(userId,data);
+  else if(user.role=="buyer") await buyerRepository.updateBuyer(userId,data);
   return { message: "User details updated successfully" };
 }
 
@@ -95,5 +98,5 @@ export async function confirmPasswordChange(token) {
 
 // Logout
 export async function logoutUser(userId) {
-  return await authRepository.logoutUser(userId);
+  return await authRepository.setIsLoggedIn(userId,false);
 }
